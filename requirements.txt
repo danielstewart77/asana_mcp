@@ -1,0 +1,6 @@
+asana
+openai
+agent_tooling
+python-dotenv
+mcpo
+mcp[cli]
