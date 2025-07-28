@@ -4,7 +4,17 @@ services:
     build: .
     container_name: mcp_server
     working_dir: /usr/src/app
-    command: ./venv/bin/mcpo --port 7777 -- ./venv/bin/python mcp_server.py
+    # Try mcpo first, fallback to direct python execution
+    command: >
+      sh -c "
+      if [ -f ./venv/bin/mcpo ]; then
+        echo 'Using mcpo...';
+        ./venv/bin/mcpo --port 7777 -- ./venv/bin/python mcp_server.py;
+      else
+        echo 'mcpo not found, running directly...';
+        RUN_DIRECT=1 ./venv/bin/python mcp_server.py;
+      fi
+      "
 
     volumes:
       - /home/daniel/asana/data:/usr/src/app/

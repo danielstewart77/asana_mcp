@@ -30,6 +30,10 @@ RUN venv/bin/pip install --no-cache-dir --force-reinstall agent_tooling
 # Install all other dependencies
 RUN venv/bin/pip install --no-cache-dir --force-reinstall -r requirements.txt
 
+# Verify mcpo installation
+RUN venv/bin/pip list | grep mcpo || echo "mcpo not found"
+RUN ls -la venv/bin/ | grep mcpo || echo "mcpo binary not found"
+
 # Copy the rest of the application after dependencies are installed
 COPY . .
 
@@ -37,4 +41,4 @@ COPY . .
 EXPOSE 7777
 
 # Run the application with the virtual environment's Python
-CMD ["venv/bin/python3", "server.py"]
+CMD ["venv/bin/python3", "mcp_server.py"]
