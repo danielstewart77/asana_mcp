@@ -37,6 +37,9 @@ RUN ls -la venv/bin/ | grep mcpo || echo "mcpo binary not found"
 # Copy the rest of the application after dependencies are installed
 COPY . .
 
+# Create data directory for volume mount
+RUN mkdir -p data
+
 # Expose the application port
 EXPOSE 7777
 

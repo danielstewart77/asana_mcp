@@ -17,7 +17,7 @@ services:
       "
 
     volumes:
-      - /home/daniel/asana/data:/usr/src/app/
+      - /home/daniel/asana/data:/usr/src/app/data
     env_file:
       - .env
 
