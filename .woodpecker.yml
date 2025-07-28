@@ -17,14 +17,14 @@ steps:
     privileged: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /home/daniel/deploy/receipts:/mnt/deploy
+      - /home/daniel/deploy/asana:/mnt/deploy
     commands:
       - echo "🚀 Deploying app to host filesystem..."
       - echo "📁 Ensuring deploy directory exists..."
       - mkdir -p /mnt/deploy
       - echo "🧹 Stopping and removing old containers..."
-      - docker stop receipts-backend receipts-frontend receipts receipts-api || true
-      - docker rm receipts-backend receipts-frontend receipts receipts-api || true
+      - docker stop asana || true
+      - docker rm asana || true
       - echo "🗑️ Cleaning old files..."
       - rm -rf /mnt/deploy/* || true
       - echo "📦 Copying new files..."
