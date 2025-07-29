@@ -7,12 +7,12 @@ services:
     # Pass API key to mcpo and use proper authentication
     command: >
       sh -c "
-      if [ -f ./venv/bin/mcpo ]; then
+      if [ -f venv/bin/mcpo ]; then
         echo 'Using mcpo with API key authentication...';
-        ./venv/bin/mcpo --port 7777 --api-key ${MCP_API_KEY} -- ./venv/bin/python mcp_server.py;
+        venv/bin/mcpo --port 7777 --api-key ${MCP_API_KEY} -- venv/bin/python3 mcp_server.py;
       else
         echo 'mcpo not found, running directly...';
-        RUN_DIRECT=1 ./venv/bin/python mcp_server.py;
+        RUN_DIRECT=1 venv/bin/python3 mcp_server.py;
       fi
       "
 

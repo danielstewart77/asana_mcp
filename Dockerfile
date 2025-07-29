@@ -30,15 +30,17 @@ RUN venv/bin/pip install --no-cache-dir --force-reinstall agent_tooling
 # Install all other dependencies
 RUN venv/bin/pip install --no-cache-dir --force-reinstall -r requirements.txt
 
-# Verify mcpo installation
-RUN venv/bin/pip list | grep mcpo || echo "mcpo not found"
-RUN ls -la venv/bin/ | grep mcpo || echo "mcpo binary not found"
+# Specifically install mcpo to ensure it's available
+RUN venv/bin/pip install --no-cache-dir mcpo
+
+# Verify installations
+RUN echo "=== Checking mcpo installation ===" && \
+    venv/bin/pip list | grep mcpo && \
+    ls -la venv/bin/ | grep mcpo && \
+    echo "=== mcpo verification complete ==="
 
 # Copy the rest of the application after dependencies are installed
 COPY . .
-
-# Create data directory for volume mount
-RUN mkdir -p data
 
 # Expose the application port
 EXPOSE 7777
