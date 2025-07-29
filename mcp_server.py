@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO, format="%(message)s")
 log = logging.getLogger(__name__)
 
 from agent_tooling import discover_tools, get_tool_function, get_tool_schemas
-discover_tools(['agents', 'workflows', 'utilities'])
+discover_tools(['toolss'])
 from mcp.server.fastmcp import FastMCP
 
 # Load API key from environment
