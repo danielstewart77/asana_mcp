@@ -3,7 +3,7 @@ import os
 import hashlib
 import hmac
 from functools import wraps
-from tools import asana
+from tools import asana_functions
 
 import logging
 logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -63,7 +63,7 @@ else:
 # if tool schemas are empty, register the default Asana tool
 if not get_tool_schemas():
     log.info("🔧 No tools found, registering default Asana tool")
-    mcp.tool()(asana.extract_incomplete_tasks)  # Ensure the tool is registered
+    mcp.tool()(asana_functions.extract_incomplete_tasks)  # Ensure the tool is registered
 
 # Register all tools with FastMCP
 for schema in get_tool_schemas():
