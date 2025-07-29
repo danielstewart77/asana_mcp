@@ -1,4 +1,4 @@
-import tools.asana as asana
+import asana
 import os
 from datetime import datetime, timezone
 from openai import OpenAI
