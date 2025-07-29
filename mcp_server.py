@@ -76,8 +76,9 @@ for schema in get_tool_schemas():
 # Run the server
 if __name__ == "__main__":
     if os.environ.get("RUN_DIRECT") == "1":
-        log.info("🚀 Starting MCP server directly (HTTP mode not available in FastMCP)")
-        log.info("💡 For HTTP access, MCPO is required - falling back to stdio mode")
+        log.info("🚀 Starting MCP server directly")
+        log.info("⚠️  Note: FastMCP only supports stdio mode, not HTTP")
+        log.info("💡 For HTTP API access, use MCPO wrapper")
         mcp.run()
     else:
         log.info("🚀 Starting MCP server in stdio mode (used by mcpo)")
