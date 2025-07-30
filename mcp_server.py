@@ -31,7 +31,5 @@ for schema in get_tool_schemas():
 
 # Run the server
 if __name__ == "__main__":
-    log.info("🚀 Starting MCP server directly")
-    log.info("⚠️  Note: FastMCP only supports stdio mode, not HTTP")
-    log.info("💡 For HTTP API access, use MCPO wrapper")
+    log.info("🚀 Starting MCP server")
     mcp.run()
