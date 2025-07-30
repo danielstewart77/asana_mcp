@@ -22,9 +22,9 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.asana.rule=Host(`asana.sparktobloom.com`)"
       - "traefik.http.routers.asana.entrypoints=web"
-      - "traefik.http.routers.asana.priority=100"
       - "traefik.http.services.asana.loadbalancer.server.port=7777"
       - "traefik.docker.network=traefik-global"
 
 networks:
   traefik-global:
+    external: true
