@@ -1,8 +1,10 @@
 import asana
 import os
+import hmac
 from datetime import datetime, timezone
 from openai import OpenAI
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Callable
+from functools import wraps
 from agent_tooling import tool
 
 from dotenv import load_dotenv
@@ -12,8 +14,54 @@ load_dotenv()
 # --- Config ---
 ASANA_PAT = os.getenv("ASANA_PAT") or "your_asana_personal_access_token"
 OPENAI_KEY = os.getenv("OPENAI_API_KEY") or "your_openai_api_key"
+MCP_API_KEY = os.getenv("MCP_API_KEY") or "mcp_secure_api_key_2025_asana_server_v1"
+
+def validate_api_token(token: str) -> bool:
+    """
+    Validate API token using secure comparison to prevent timing attacks.
+    Accepts both direct token and Bearer format.
+    """
+    if not token:
+        return False
+    
+    # Handle Bearer token format
+    if token.startswith("Bearer "):
+        token = token[7:]  # Remove "Bearer " prefix
+    
+    # Use HMAC comparison to prevent timing attacks
+    expected = MCP_API_KEY.encode('utf-8')
+    provided = token.encode('utf-8')
+    
+    return hmac.compare_digest(expected, provided)
+
+def require_bearer_auth(func: Callable) -> Callable:
+    """
+    Decorator that validates Bearer token authentication.
+    Expects the first parameter to be 'api_key' containing the Bearer token.
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        # Get api_key from first argument or kwargs
+        api_key = None
+        if args:
+            api_key = args[0]
+        elif 'api_key' in kwargs:
+            api_key = kwargs['api_key']
+        
+        if not api_key:
+            raise ValueError("API key is required. Please provide a Bearer token.")
+        
+        # Validate the token
+        if not validate_api_token(api_key):
+            raise ValueError("Invalid API key. Please provide a valid Bearer token.")
+        
+        # Call the original function
+        return func(*args, **kwargs)
+    
+    return wrapper
 
 @tool(tags=["asana_projects"])
+@require_bearer_auth
 def extract_incomplete_tasks() -> List[Dict[str, Any]]:
     """
     Fetch all incomplete or overdue tasks across all active projects in the user's workspace.
@@ -92,8 +140,8 @@ Tasks:
     return response.choices[0].message.content.strip()
 
 if __name__ == "__main__":
-    token = os.getenv("ASANA_PAT") or "<YOUR_TOKEN>"
-    tasks = extract_incomplete_tasks(token)
+    api_key = os.getenv("MCP_API_KEY") or "mcp_secure_api_key_2025_asana_server_v1"
+    tasks = extract_incomplete_tasks(api_key)
     print(f"Found {len(tasks)} incomplete/overdue tasks")
     
     # Show first 5 tasks
