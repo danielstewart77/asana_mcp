@@ -10,7 +10,7 @@ services:
     #   - 7777:7777
 
     volumes:
-      - /home/daniel/asana/data:/usr/src/app/data
+      - /home/daniel/deploy/asana/data:/usr/src/app/data
     env_file:
       - .env
 
